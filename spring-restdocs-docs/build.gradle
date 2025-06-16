@@ -1,0 +1,42 @@
+plugins {
+	id "java"
+	id "org.springframework.restdocs.conventions"
+	id "org.springframework.restdocs.antora"
+}
+
+dependencies {
+	testImplementation(project(":spring-restdocs-mockmvc"))
+	testImplementation(project(":spring-restdocs-webtestclient"))
+
+	testImplementation("jakarta.servlet:jakarta.servlet-api")
+	testImplementation("jakarta.validation:jakarta.validation-api")
+	testImplementation("org.testng:testng:6.9.10")
+
+	testImplementation(testFixtures(project(":spring-restdocs-core")))
+}
+
+def zipRootAggregateContent = tasks.register("zipRootAggregateContent", Zip) {
+	from("src/test") {
+		into "modules/ROOT/examples"
+	}
+	from(tasks.getByName("generateAntoraYml")) {
+		into "modules"
+	}
+	destinationDirectory = layout.buildDirectory.dir("generated/docs/antora-content")
+	archiveClassifier = "%s-%s-content".formatted("root", "aggregate")
+}
+
+tasks.named("antora") {
+	inputs.files(zipRootAggregateContent).withPathSensitivity(PathSensitivity.RELATIVE).withPropertyName(zipRootAggregateContent.name);
+}
+
+// antora {
+// 	dependencies = [
+// 		'@antora/atlas-extension'         : '0.0.2',
+// 		'@antora/collector-extension'     : '1.0.1',
+// 		'@asciidoctor/tabs'               : '1.0.0-beta.6',
+// 		'@springio/antora-extensions'     : '1.14.4',
+// 		'@springio/asciidoctor-extensions': '1.0.0-alpha.17',
+// 	]
+// 	playbook = "src/docs/antora/antora-playbook.yml"
+// }
