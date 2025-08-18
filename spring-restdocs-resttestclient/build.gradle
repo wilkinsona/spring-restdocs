@@ -1,0 +1,24 @@
+plugins {
+	id 'org.springframework.restdocs.conventions'
+	id "java-library"
+	id "maven-publish"
+}
+
+description = "Spring REST Docs RestTestClient"
+
+dependencies {
+	api(project(":spring-restdocs-core"))
+	api("org.springframework:spring-test")
+	api("org.springframework:spring-webmvc")
+
+	implementation("jakarta.servlet:jakarta.servlet-api")
+
+	compileOnly("org.hamcrest:hamcrest-core")
+	compileOnly("com.google.code.findbugs:jsr305")
+
+	testCompileOnly("org.hamcrest:hamcrest-core")
+
+	testImplementation(testFixtures(project(":spring-restdocs-core")))
+
+	testRuntimeOnly("org.springframework:spring-context")
+}

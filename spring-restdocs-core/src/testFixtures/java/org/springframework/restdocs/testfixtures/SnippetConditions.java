@@ -106,7 +106,7 @@ public final class SnippetConditions {
 
 				@Override
 				public String value() {
-					return getLinesAsString();
+					return "\n" + getLinesAsString();
 				}
 
 			});
@@ -230,6 +230,11 @@ public final class SnippetConditions {
 		@Override
 		public boolean matches(String item) {
 			return this.delegate.matches(item);
+		}
+
+		@Override
+		public Description description() {
+			return this.delegate.description();
 		}
 
 	}
